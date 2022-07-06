@@ -11,7 +11,7 @@ export class AppService {
   private appConfig: ConfigType<typeof appConfig>
 
   getHello(): string {
-    this.logger.info('hello', 'Hello World23!' + this.appConfig.port)
+    this.logger.info('Hello World23!' + this.appConfig.port)
     return 'Hello World23!' + this.appConfig.port;
   }
 

@@ -1,13 +1,10 @@
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config'
 import loggerConfig from '@/config/logger.config';
-// import { address } from 'ip';
 // import * as os from 'os';
 import { createLogger, transports, format, Logger, QueryOptions } from 'winston';
 import 'winston-daily-rotate-file';
-const { combine, timestamp, json } = format;
-
-// type LogCenterLevel = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+const { combine, timestamp, json, label } = format;
 
 @Injectable()
 export class LoggerService implements OnApplicationBootstrap {
@@ -43,7 +40,8 @@ export class LoggerService implements OnApplicationBootstrap {
     const Logger = createLogger({
       level: 'info', // 储存info级别以下的logger (error, warn, info)
       format: combine(
-        timestamp(), 
+        label({ label: this.logConfig.prefix }),
+        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), 
         json()
       ),
       exitOnError: false,
@@ -58,16 +56,16 @@ export class LoggerService implements OnApplicationBootstrap {
     this.logger = this.createLogger()
   }
 
-  public info(title: string, data: any) {
-    this.logger.info(title, data);
+  public info(data: any) {
+    this.logger.info(data instanceof Object ? JSON.stringify(data) : String(data));
   }
 
-  public warn(title: string, data: any) {
-    this.logger.warn(title, data);
+  public warn(data: any) {
+    this.logger.warn(data instanceof Object ? JSON.stringify(data) : String(data));
   }
 
-  public error(title: string, data: any) {
-    this.logger.error(title, data);
+  public error(data: any) {
+    this.logger.error(data instanceof Object ? JSON.stringify(data) : String(data));
   }
 
   public query(options: QueryOptions): Promise<any> {
