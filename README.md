@@ -5,7 +5,7 @@
 
 可用于快速搭建一个[NestJS 8](https://nestjs.com/)项目
 
-### Project structure
+## Project structure
 
   ```bash
   ├─src
